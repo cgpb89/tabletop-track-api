@@ -1,0 +1,21 @@
+{
+    "restartable": "rs",
+    "watch": [
+        "src/",
+        "views/"
+    ],
+    "ext": "ts twig env json",
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "exec": "ts-node src/www",
+    "verbose": true,
+    "execMap": {
+        "js": "node --harmony"
+    },
+    "signal": "SIGHUP",
+    "env": {
+        "NODE_ENV": "development"
+    }
+}
