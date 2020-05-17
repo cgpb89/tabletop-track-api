@@ -1,14 +1,14 @@
 import createError from 'http-errors';
 import express from 'express';
-import mongoose from 'mongoose';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import { databaseLocalConnection } from "./database/mongo-db";
+// ROUTES IMPORTS
 import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+import usersRouter from './routes/user';
 import gamesRoute from './routes/game';
 import groupRoute from './routes/group';
-import { databaseLocalConnection } from "./database/mongo-db";
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ROUTES
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 app.use('/games', gamesRoute);
 app.use('/group', groupRoute);
 

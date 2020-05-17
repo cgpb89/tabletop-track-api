@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
+export interface IUser extends mongoose.Document {
+    name: string;
+    adminUser: mongoose.Types.ObjectId[];
+    players: mongoose.Types.ObjectId[]
+}
+
 const GroupSchema = new Schema({
-    adminUser: [{
+    adminUsers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }],
@@ -17,10 +23,6 @@ const GroupSchema = new Schema({
     players: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
-    }],
-    matches: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'match'
     }]
 });
 

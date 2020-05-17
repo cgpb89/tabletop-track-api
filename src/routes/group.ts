@@ -11,7 +11,7 @@ router.post("/", asyncErrorHandler(createGroup));
 
 router.put("/:id", asyncErrorHandler(editGroup));
 
-router.delete("/:id", asyncErrorHandler(deleteGroup));
+router.delete("/:id/:userId", asyncErrorHandler(deleteGroup));
 
 
 export default router;
