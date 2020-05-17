@@ -10,13 +10,13 @@ const GameSchema = new Schema({
         required: true,
         type: String,
     },
-    duration: Number,
+    duration: String,
     name: {
         required: true,
         type: String,
         unique: true
     },
-    numPlayers: Number,
+    numPlayers: String,
     language: [
         {
             type: String
@@ -24,4 +24,4 @@ const GameSchema = new Schema({
     ]
 });
 
-module.exports = mongoose.model('Game', GameSchema);
+export default mongoose.model('Game', GameSchema);
