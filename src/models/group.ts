@@ -10,7 +10,7 @@ export interface IUser extends mongoose.Document {
 const GroupSchema = new Schema({
     adminUsers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     }],
     date: {
         type: Date,
@@ -22,7 +22,7 @@ const GroupSchema = new Schema({
     },
     players: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     }]
 });
 

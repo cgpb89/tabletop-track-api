@@ -2,23 +2,21 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const MatchSchema = new Schema({
-    game: [{
+    gameId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'game'
-    }],
+        ref: 'Game'
+    },
     date: {
         type: Date,
         default: Date.now
     },
     players: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'User'
     }],
-    group: {
-        {
+    groupId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'group'
-    }
+        ref: 'Group'
     }
 });
 

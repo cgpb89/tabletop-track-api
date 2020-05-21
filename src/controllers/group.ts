@@ -1,6 +1,5 @@
 import Group from "../models/group";
 import User from "../models/user";
-import IUser from "../models/user"
 
 async function listGroup(req: any, res: any, next: any) {
     const groups = await Group.find();
@@ -66,6 +65,7 @@ async function deleteGroup(req: any, res: any, next: any) {
     res.send(`Group deleted successfully`);
 }
 
+// VALIDATED FUNCTIONS
 async function checkIfPlayerExist(players: string[]): Promise<string[]> {
     const playersToAdd: string[] = []
     for (const i of players) {
@@ -101,7 +101,6 @@ function checkIfAdminUsersAreSent(adminUsers: string[]): string {
     }
     return "";
 }
-
 
 // EXPORT ALL FUNCTIONS
 export {

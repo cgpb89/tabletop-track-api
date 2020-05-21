@@ -9,7 +9,8 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/user';
 import gamesRoute from './routes/game';
 import groupRoute from './routes/group';
-
+import matchRoute from './routes/match'
+;
 const app = express();
 
 // DATA BASE CONNECTION
@@ -30,6 +31,7 @@ app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/games', gamesRoute);
 app.use('/group', groupRoute);
+app.use('/match', matchRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
