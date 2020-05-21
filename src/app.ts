@@ -1,19 +1,20 @@
-import createError from "http-errors";
+import createError from 'http-errors';
 import express from 'express';
-import mongoose from 'mongoose';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import { databaseLocalConnection } from "./database/mongo-db";
+// ROUTES IMPORTS
 import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+import usersRouter from './routes/user';
 import gamesRoute from './routes/game';
-
+import groupRoute from './routes/group';
+import matchRoute from './routes/match';
+import positionRoute from './routes/position';
 const app = express();
 
 // DATA BASE CONNECTION
-mongoose.connect('mongodb://carlosp:Carlos-89@ds259245.mlab.com:59245/tabletop-track', { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true/*, useCreateIndex: true */})
-  .then(() => console.log("Conectado a Mongo DB"))
-  .catch((error: any) => console.log("No se ha conectado a la DB \n" + error));
+databaseLocalConnection();
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
@@ -25,9 +26,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ROUTES
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/gamesRoute', gamesRoute);
+app.use('/user', usersRouter);
+app.use('/games', gamesRoute);
+app.use('/group', groupRoute);
+app.use('/match', matchRoute);
+app.use('/position', positionRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -42,7 +47,7 @@ app.use((err: any, req: any, res: any, next: any) => {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(`Error ${err}`);
 });
 
 export = app;
