@@ -35,7 +35,13 @@ async function editGame(req: any, res: any, next: any) {
 }
 
 async function deleteGame(req: any, res: any, next: any) {
-    await Game.findByIdAndDelete(req.params.id);
+    const game = await Game.findByIdAndDelete(req.params.id);
+
+    if (!game) {
+        res.status(404).send("The game does not exist");
+        return;
+    }
+
     res.send(`Game delete successfully`);
 }
 

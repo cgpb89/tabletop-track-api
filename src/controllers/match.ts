@@ -13,7 +13,6 @@ async function getMatch(req: any, res: any, next: any) {
     const match = await Match.findById(req.params.id)
         .populate('groupId', 'name')
         .populate('gameId', 'name numPlayers');
-    console.log(match);
     res.send(match);
 }
 
@@ -32,14 +31,8 @@ async function createMatch(req: any, res: any, next: any) {
 }
 
 async function editMatch(req: any, res: any, next: any) {
-    console.log(req.body);
-    const adminUsersSent = checkIfUserIsAdmin(req.body.userId);
-    if (adminUsersSent !== "") {
-        res.status(200).send(`${adminUsersSent}`);
-        return;
-    }
     // Check if the user is an admin of the match to be editted
-    const canEdit = await canUserEdit(req.body.userId, req.body.groupId);
+    const canEdit = await canUserEditMatch(req.body.userId, req.params.id);
     if (canEdit !== "") {
         res.status(200).send(`${canEdit}`);
         return;
@@ -49,8 +42,8 @@ async function editMatch(req: any, res: any, next: any) {
     req.body.players = await checkIfPlayerExist(req.body.players);
 
     const result = await Match.findByIdAndUpdate(req.params.id, {
-        adminUsers: req.body.adminUsers,
-        name: req.body.name,
+        gameId: req.body.gameId,
+        groupId: req.body.groupId,
         players: req.body.players
     });
 
@@ -64,7 +57,7 @@ async function editMatch(req: any, res: any, next: any) {
 
 async function deleteMatch(req: any, res: any, next: any) {
     // Check if the user is an admin of the match to be editted
-    const canEdit = await canUserDeleteMatch(req.params.userId, req.params.id);
+    const canEdit = await canUserEditMatch(req.params.userId, req.params.id);
     if (canEdit !== "") {
         res.status(200).send(`${canEdit}`);
         return;
@@ -100,14 +93,7 @@ async function canUserEdit(userId: string, groupId: string): Promise<string> {
     return "";
 }
 
-function checkIfUserIsAdmin(userId: string): string {
-    if (!userId.length) {
-        return "You must be and admin to edit this match.";
-    }
-    return "";
-}
-
-async function canUserDeleteMatch(userId: string, matchId: string): Promise<string> {
+async function canUserEditMatch(userId: string, matchId: string): Promise<string> {
 
     const match = await (await Match.findById(matchId));
 
