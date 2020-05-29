@@ -63,14 +63,12 @@ async function editPosition(req: any, res: any, next: any) {
         position: req.body.position,
         points: req.body.points,
         match: req.body.match
-    });
-
-    const updatedPosition = await Position.findById(req.params.id);
+    }, {new: true});
 
     if (!result) {
         res.status(404).send("The position does not exist");
     }
-    res.send(`${updatedPosition}`);
+    res.send(`${result}`);
 }
 
 async function deletePosition(req: any, res: any, next: any) {

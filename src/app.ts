@@ -2,6 +2,8 @@ import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import passport  from 'passport';
 import logger from 'morgan';
 import { databaseLocalConnection } from "./database/mongo-db";
 // ROUTES IMPORTS
@@ -11,6 +13,9 @@ import gamesRoute from './routes/game';
 import groupRoute from './routes/group';
 import matchRoute from './routes/match';
 import positionRoute from './routes/position';
+import secureRoute from './routes/secure-routes';
+// tslint:disable-next-line: no-var-requires
+require("./auth/auth");
 const app = express();
 
 // DATA BASE CONNECTION
@@ -33,6 +38,8 @@ app.use('/games', gamesRoute);
 app.use('/group', groupRoute);
 app.use('/match', matchRoute);
 app.use('/position', positionRoute);
+// app.use('/user', passport.authenticate('jwt', { session : false }), usersRouter );
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

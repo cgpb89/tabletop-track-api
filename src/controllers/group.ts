@@ -44,14 +44,12 @@ async function editGroup(req: any, res: any, next: any) {
         adminUsers: req.body.adminUsers,
         name: req.body.name,
         players: req.body.players
-    });
-
-    const updatedGroup = await Group.findById(req.params.id);
+    }, {new: true});
 
     if (!result) {
         res.status(404).send("The group does not exist");
     }
-    res.send(`${updatedGroup}`);
+    res.send(`${result}`);
 }
 
 async function deleteGroup(req: any, res: any, next: any) {

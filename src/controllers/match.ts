@@ -45,14 +45,12 @@ async function editMatch(req: any, res: any, next: any) {
         gameId: req.body.gameId,
         groupId: req.body.groupId,
         players: req.body.players
-    });
-
-    const updatedMatch = await Match.findById(req.params.id);
+    }, {new: true});
 
     if (!result) {
         res.status(404).send("The match does not exist");
     }
-    res.send(`${updatedMatch}`);
+    res.send(`${result}`);
 }
 
 async function deleteMatch(req: any, res: any, next: any) {

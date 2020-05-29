@@ -1,17 +1,21 @@
 import express from "express";
-import { asyncErrorHandler } from "../middleware/index";
-import { listUser, getUser, createUser, editUser, deleteUser } from "../controllers/user";
+import passport from 'passport';
+import { asyncErrorHandler, isUserAdmin } from "../middleware/index";
+import { listUser, getUser, createUser, editUser, deleteUser, login, signup } from "../controllers/user";
 const router = express.Router();
 
-router.get("/", asyncErrorHandler(listUser));
+// When the user sends a post request to this route, passport authenticates the user based on the
+// middleware created previously
+router.post('/signup', passport.authenticate('signup', { session : false }) , login);
 
-router.get("/:id", asyncErrorHandler(getUser));
+router.post('/login', login);
 
-router.post("/", asyncErrorHandler(createUser));
+router.get("/", passport.authenticate('jwt', { session : false }), isUserAdmin,  asyncErrorHandler(listUser));
 
-router.put("/:id", asyncErrorHandler(editUser));
+router.get("/:id", passport.authenticate('jwt', { session : false }), isUserAdmin, asyncErrorHandler(getUser));
 
-router.delete("/:id", asyncErrorHandler(deleteUser));
+router.put("/:id", passport.authenticate('jwt', { session : false }), asyncErrorHandler(editUser));
 
+router.delete("/:id", passport.authenticate('jwt', { session : false }), isUserAdmin, asyncErrorHandler(deleteUser));
 
 export default router;

@@ -24,14 +24,12 @@ async function editGame(req: any, res: any, next: any) {
         language: game.language,
         name: game.name,
         numPlayers: game.numPlayers
-    });
-
-    const updatedGame = await Game.findById(req.params.id);
+    }, {new: true});
 
     if (!result) {
         res.status(404).send("The game does not exist");
     }
-    res.send(`${updatedGame}`);
+    res.send(`${result}`);
 }
 
 async function deleteGame(req: any, res: any, next: any) {
