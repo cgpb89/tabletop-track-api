@@ -32,7 +32,7 @@ async function createMatch(req: any, res: any, next: any) {
 
 async function editMatch(req: any, res: any, next: any) {
     // Check if the user is an admin of the match to be editted
-    const canEdit = await canUserEditMatch(req.body.userId, req.params.id);
+    const canEdit = await canUserEditMatch(req.body.userId, req.params.id, req.body.groupId);
     if (canEdit !== "") {
         res.status(200).send(`${canEdit}`);
         return;
@@ -55,7 +55,7 @@ async function editMatch(req: any, res: any, next: any) {
 
 async function deleteMatch(req: any, res: any, next: any) {
     // Check if the user is an admin of the match to be editted
-    const canEdit = await canUserEditMatch(req.params.userId, req.params.id);
+    const canEdit = await canUserEditMatch(req.params.userId, req.params.id, req.params.groupId);
     if (canEdit !== "") {
         res.status(200).send(`${canEdit}`);
         return;
@@ -83,7 +83,7 @@ async function canUserEdit(userId: string, groupId: string): Promise<string> {
         return "Please send the user ID";
     }
 
-    const group = await (await Group.find({ _id: groupId, adminUsers: { $in: [userId] } }));
+    const group = await Group.find({ _id: groupId, adminUsers: { $in: [userId] } });
 
     if (!group.length) {
         return "You are not an admin of this group";
@@ -91,15 +91,15 @@ async function canUserEdit(userId: string, groupId: string): Promise<string> {
     return "";
 }
 
-async function canUserEditMatch(userId: string, matchId: string): Promise<string> {
+async function canUserEditMatch(userId: string, matchId: string, groupId: string): Promise<string> {
 
-    const match = await (await Match.findById(matchId));
+    const match = await Match.findById(matchId);
 
     if(!match) {
         return "Match does not exist";
     }
 
-    return canUserEdit(userId, match.toObject().groupId);
+    return canUserEdit(userId, groupId);
 }
 
 

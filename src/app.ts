@@ -13,7 +13,7 @@ import gamesRoute from './routes/game';
 import groupRoute from './routes/group';
 import matchRoute from './routes/match';
 import positionRoute from './routes/position';
-import secureRoute from './routes/secure-routes';
+import userGames from './routes/userGames';
 // tslint:disable-next-line: no-var-requires
 require("./auth/auth");
 const app = express();
@@ -38,8 +38,7 @@ app.use('/games', gamesRoute);
 app.use('/group', groupRoute);
 app.use('/match', matchRoute);
 app.use('/position', positionRoute);
-// app.use('/user', passport.authenticate('jwt', { session : false }), usersRouter );
-
+app.use('/my/games', userGames);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
