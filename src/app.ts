@@ -18,6 +18,15 @@ import userGames from './routes/userGames';
 require("./auth/auth");
 const app = express();
 
+app.all('*', (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,  Accept, Authorization');
+  if ('OPTIONS' === req.method) return res.send(200);
+  next();
+});
+
 // DATA BASE CONNECTION
 databaseLocalConnection();
 

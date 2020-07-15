@@ -22,8 +22,7 @@ async function login(req: any, res: any, next: any) {
     passport.authenticate('login', async (err: any, user: any, info: any) => {
         try {
             if (err || !user) {
-                const error = new Error(info.message);
-                return next(error);
+                return res.json("User not found");
             }
             req.login(user, { session: false }, async (error: any) => {
                 if (error) return next(error)
@@ -39,6 +38,7 @@ async function login(req: any, res: any, next: any) {
                 return res.json({ token });
             });
         } catch (error) {
+            console.log("catch", error);
             return next(error);
         }
     })(req, res, next);
@@ -58,6 +58,15 @@ async function getUser(req: any, res: any, next: any) {
     res.send(user);
 }
 
+async function getUserMe(req: any, res: any, next: any) {
+    console.log(req.user);
+    const user = await User.findById(req.user._id, { password: 0, __v: 0 });
+    if (!user) {
+        return res.status(404).send('Usuario no encontrado con el ID: ' + req.user._id);
+    }
+    res.send(user);
+}
+
 async function createUser(req: any, res: any, next: any) {
     let user = await User.findOne({ email: req.body.email });
 
@@ -72,7 +81,7 @@ async function createUser(req: any, res: any, next: any) {
         email: req.body.email,
         password: hashPassword,
         isAdmin: true,
-        role: roles.ADMIN,
+        role: roles.USER,
         image: req.body.image
     });
 
@@ -128,13 +137,25 @@ async function deleteUser(req: any, res: any, next: any) {
     res.status(200).send("User deleted");
 }
 
+async function searchUser(req: any, res: any, next: any) {
+    console.log(req.params.userName);
+
+    const param =  { $regex: req.params.userName };
+
+    const response = await User.find({$or:[{ firstName: param },{ lastName: param}]}, 'firstName lastName _id').exec();
+
+    res.json(response);
+}
+
 // EXPORT ALL FUNCTIONS
 export {
     createUser,
     deleteUser,
     editUser,
     getUser,
+    getUserMe,
     listUser,
     login,
-    signup
+    signup,
+    searchUser,
 };
