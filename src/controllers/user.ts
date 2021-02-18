@@ -138,9 +138,7 @@ async function deleteUser(req: any, res: any, next: any) {
 }
 
 async function searchUser(req: any, res: any, next: any) {
-    console.log(req.params.userName);
-
-    const param =  { $regex: req.params.userName };
+    const param =  { $regex: new RegExp(req.params.userName, "ig") };
 
     const response = await User.find({$or:[{ firstName: param },{ lastName: param}]}, 'firstName lastName _id').exec();
 

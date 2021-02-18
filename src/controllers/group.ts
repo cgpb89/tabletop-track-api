@@ -7,7 +7,10 @@ async function listGroup(req: any, res: any, next: any) {
 }
 
 async function getGroup(req: any, res: any, next: any) {
-    const group = await Group.findById(req.params.id);
+    const group = await Group.findById(req.params.id)
+    .populate('players', 'firstName lastName email isAdmin', User)
+    .populate('adminUsers', 'firstName email', User);
+
     res.send(group);
 }
 
@@ -31,7 +34,7 @@ async function editGroup(req: any, res: any, next: any) {
         return;
     }
     // Check if the user is an admin of the group to be editted
-    const canEdit = await canUserEdit(req.body.userId, req.params.id);
+    const canEdit = await canUserEdit(req.body.userId, req.body.id);
     if (canEdit !== "") {
         res.status(200).send(`${canEdit}`);
         return;
@@ -40,7 +43,7 @@ async function editGroup(req: any, res: any, next: any) {
     // If the user does not exist do not add it to the groups.players[]
     req.body.players = await checkIfPlayerExist(req.body.players);
 
-    const result = await Group.findByIdAndUpdate(req.params.id, {
+    const result = await Group.findByIdAndUpdate(req.body.id, {
         adminUsers: req.body.adminUsers,
         name: req.body.name,
         players: req.body.players

@@ -5,7 +5,7 @@ import Group from "../models/group";
 async function listMatch(req: any, res: any, next: any) {
     const matchs = await Match.find()
         .populate('groupId', 'name')
-        .populate('gameId', 'name numPlayers');;
+        .populate('gameId', 'name numPlayers');
     res.send(matchs);
 }
 

@@ -9,7 +9,7 @@ router.get("/:id", asyncErrorHandler(getGroup));
 
 router.post("/", asyncErrorHandler(createGroup));
 
-router.put("/:id", asyncErrorHandler(editGroup));
+router.put("/", asyncErrorHandler(editGroup));
 
 router.delete("/:id/:userId", asyncErrorHandler(deleteGroup));
 
